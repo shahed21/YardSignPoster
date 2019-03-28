@@ -56,9 +56,9 @@ public abstract class LocationDB extends RoomDatabase {
             Location location = new Location(
                     29.7045993,
                     -95.4213404,
-                    "2600 Gramercy St",
+                    "2600 Gramercy St, Houston, TX 77030",
                     "Houston",
-                    "TX",
+                    "Texas",
                     "77030");
             location.setFeatureName("Home");
             locationDao.insert(location);

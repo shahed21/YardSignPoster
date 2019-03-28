@@ -178,6 +178,12 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "To view Location at " + item.getLatitude() + ", " + item.getLongitude(), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onItemDeleteClicked(com.shahedrahim.yardsignposter.data.Location location) {
+        Toast.makeText(this, "Deleting location", Toast.LENGTH_SHORT).show();
+        mainActivityViewModel.deleteLocation(location);
+    }
+
     /*---------- Listener class to get coordinates ------------- */
     private class MyLocationListener implements LocationListener {
         private static final String TAG = "MyLocationListener";
@@ -205,12 +211,15 @@ public class MainActivity extends AppCompatActivity
                 if (addresses.size() > 0) {
                     Address address = addresses.get(0);
                     String addressLine = "";
+                    Log.d(TAG, "onLocationChanged: getMaxAddressLineIndex = " + address.getMaxAddressLineIndex());
                     for (int i=0; i<=address.getMaxAddressLineIndex(); i++) {
                         addressLine += address.getAddressLine(i);
-                        if (i!=address.getMaxAddressLineIndex()) {
+                        if (i<address.getMaxAddressLineIndex()) {
+                            Log.d(TAG, "onLocationChanged: double lined address");
                             addressLine += "\n";
                         }
                     }
+                    Log.d(TAG, "onLocationChanged: addressLine" + addressLine);
                     location = new com.shahedrahim.yardsignposter.data.Location(
                             loc.getLatitude(),
                             loc.getLongitude(),
@@ -218,11 +227,17 @@ public class MainActivity extends AppCompatActivity
                             address.getLocality(),
                             address.getAdminArea(),
                             address.getPostalCode());
+                    Log.d(TAG, "onLocationChanged: featureName = " + address.getFeatureName() );
                     location.setFeatureName(address.getFeatureName());
+                    Log.d(TAG, "onLocationChanged: country = " + address.getCountryName() );
                     location.setCountry(address.getCountryName());
+                    Log.d(TAG, "onLocationChanged: subAdminArea = " + address.getSubAdminArea() );
                     location.setSubAdminArea(address.getSubAdminArea());
+                    Log.d(TAG, "onLocationChanged: Phone = " + address.getPhone() );
                     location.setPhone(address.getPhone());
+                    Log.d(TAG, "onLocationChanged: Premises = " + address.getPremises() );
                     location.setPremises(address.getPremises());
+                    Log.d(TAG, "onLocationChanged: URL = " + address.getUrl() );
                     location.setUrl(address.getUrl());
 
                     mainActivityViewModel.insertNewLocation(location);

@@ -34,6 +34,7 @@ public class LocationAdapter extends ListAdapter<Location, LocationAdapter.Locat
         super(DIFF_CALLBACK);
     }
 
+    //Overrides
     @NonNull
     @Override
     public LocationAdapter.LocationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -49,21 +50,44 @@ public class LocationAdapter extends ListAdapter<Location, LocationAdapter.Locat
 
     }
 
+
+    //Setters and Getters
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
+    //Inner Classes
     public class LocationHolder extends RecyclerView.ViewHolder {
         private Location location;
-        private TextView featureView;
+//        private TextView featureView;
         private TextView addressView;
-        private TextView cszView;
+//        private TextView cszView;
+//        private TextView premisesView;
         private TextView latView;
         private TextView longView;
         private ImageButton locationButton;
+        private ImageButton deleteButton;
+
         public LocationHolder(@NonNull View itemView) {
             super(itemView);
-            featureView = itemView.findViewById(R.id.location_feature_name_text_view);
+//            featureView = itemView.findViewById(R.id.location_feature_name_text_view);
             addressView = itemView.findViewById(R.id.location_address_text_view);
-            cszView = itemView.findViewById(R.id.location_csz_text_view);
+//            cszView = itemView.findViewById(R.id.location_csz_text_view);
             latView = itemView.findViewById(R.id.location_lat_text_view);
             longView = itemView.findViewById(R.id.location_long_text_view);
+//            premisesView = itemView.findViewById(R.id.location_premises);
+
+            deleteButton = itemView.findViewById(R.id.location_delete_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (onItemClickListener!=null && position!=RecyclerView.NO_POSITION) {
+                        onItemClickListener.onItemDeleteClicked(location);
+                    }
+                }
+            });
 
             locationButton = itemView.findViewById(R.id.location_view_button);
 
@@ -80,22 +104,21 @@ public class LocationAdapter extends ListAdapter<Location, LocationAdapter.Locat
 
         public void setLocation(Location currentLocation) {
             location = currentLocation;
-            featureView.setText(currentLocation.getFeatureName());
+//            premisesView.setText(currentLocation.getPremises());
+//            featureView.setText(currentLocation.getFeatureName());
             addressView.setText(currentLocation.getAddress());
-            cszView.setText(
-                    currentLocation.getLocality() + ", "
-                            + currentLocation.getAdminArea() + " "
-                            + currentLocation.getPostalCode());
+//            cszView.setText(
+//                    currentLocation.getLocality() + ", "
+//                            + currentLocation.getAdminArea() + " "
+//                            + currentLocation.getPostalCode());
             latView.setText( ""+currentLocation.getLatitude());
             longView.setText(""+currentLocation.getLongitude());
         }
     }
 
+    //Interfaces
     public interface OnItemClickListener {
         void onItemViewClicked(Location item);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+        void onItemDeleteClicked(Location location);
     }
 }

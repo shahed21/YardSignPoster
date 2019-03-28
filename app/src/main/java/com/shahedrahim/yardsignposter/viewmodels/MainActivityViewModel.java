@@ -48,4 +48,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void insertNewLocation(Location location) {
         repository.insertNewLocation(location);
     }
+
+    public void deleteLocation(Location location) {
+        repository.deleteLocation(location);
+    }
 }
