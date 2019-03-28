@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_margin"
+    android:padding="@dimen/half_padding">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/location_address_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            tools:text="Address"/>
+
+        <TextView
+            android:id="@+id/location_csz_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/location_address_text_view"
+            android:layout_alignParentStart="true"
+            tools:text="City, State ZIP"/>
+
+        <TextView
+            android:id="@+id/location_lat_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/after_address"
+            android:layout_width="@dimen/coord_label_width"
+            android:layout_height="wrap_content"
+            android:text="@string/latitude_label"/>
+        <TextView
+            android:id="@+id/location_long_label"
+            android:layout_below="@id/location_lat_label"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/after_address"
+            android:layout_width="@dimen/coord_label_width"
+            android:layout_height="wrap_content"
+            android:text="@string/longitude_label"/>
+
+        <TextView
+            android:id="@+id/location_lat_text_view"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/location_lat_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="XX.xx"/>
+        <TextView
+            android:id="@+id/location_long_text_view"
+            android:layout_below="@id/location_lat_text_view"
+            android:layout_toEndOf="@id/location_long_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="XX.xx"/>
+
+        <ImageButton
+            android:id="@+id/location_view_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@android:drawable/ic_dialog_info"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
