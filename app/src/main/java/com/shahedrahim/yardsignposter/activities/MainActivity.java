@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity
                 (LocationManager)getSystemService(Context.LOCATION_SERVICE));
         mainActivityViewModel.setLocationListener(new MyLocationListener());
 
-        Log.d(TAG, "onCreate: locationAdapter.getItemCount() = "+ locationAdapter.getItemCount());
-
         FloatingActionButton fab2 = findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override

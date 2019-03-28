@@ -11,11 +11,19 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/location_address_text_view"
+            android:id="@+id/location_feature_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            tools:text="Feature"/>
+
+        <TextView
+            android:id="@+id/location_address_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/location_feature_name_text_view"
+            android:layout_alignParentStart="true"
             tools:text="Address"/>
 
         <TextView
@@ -60,10 +68,19 @@
 
         <ImageButton
             android:id="@+id/location_view_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/card_view_image_button_width"
+            android:layout_height="@dimen/card_view_image_button_height"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:src="@android:drawable/ic_dialog_info"/>
+            android:src="@android:drawable/ic_menu_info_details"/>
+
+        <ImageButton
+            android:id="@+id/location_delete_button"
+            android:layout_width="@dimen/card_view_image_button_width"
+            android:layout_height="@dimen/card_view_image_button_height"
+            android:layout_marginEnd="@dimen/card_view_delete_button_margin_end"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@android:drawable/ic_menu_delete"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
