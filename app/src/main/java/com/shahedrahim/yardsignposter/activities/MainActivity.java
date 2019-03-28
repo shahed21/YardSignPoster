@@ -184,7 +184,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onLocationChanged(Location loc) {
-            emptyTextView.setText("");
             //pb.setVisibility(View.INVISIBLE);
             Toast.makeText(
                     getBaseContext(),
@@ -196,23 +195,42 @@ public class MainActivity extends AppCompatActivity
             Log.v(TAG, latitude);
 
             /*------- To get city name from coordinates -------- */
-            String cityName = null;
+            //String cityName = null;
             Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+            com.shahedrahim.yardsignposter.data.Location location;
             List<Address> addresses;
             try {
                 addresses = gcd.getFromLocation(loc.getLatitude(),
                         loc.getLongitude(), 1);
                 if (addresses.size() > 0) {
-                    System.out.println(addresses.get(0).getLocality());
-                    cityName = addresses.get(0).getLocality();
+                    Address address = addresses.get(0);
+                    String addressLine = "";
+                    for (int i=0; i<=address.getMaxAddressLineIndex(); i++) {
+                        addressLine += address.getAddressLine(i);
+                        if (i!=address.getMaxAddressLineIndex()) {
+                            addressLine += "\n";
+                        }
+                    }
+                    location = new com.shahedrahim.yardsignposter.data.Location(
+                            loc.getLatitude(),
+                            loc.getLongitude(),
+                            addressLine,
+                            address.getLocality(),
+                            address.getAdminArea(),
+                            address.getPostalCode());
+                    location.setFeatureName(address.getFeatureName());
+                    location.setCountry(address.getCountryName());
+                    location.setSubAdminArea(address.getSubAdminArea());
+                    location.setPhone(address.getPhone());
+                    location.setPremises(address.getPremises());
+                    location.setUrl(address.getUrl());
+
+                    mainActivityViewModel.insertNewLocation(location);
                 }
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
-            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-                    + cityName;
-            emptyTextView.setText(s);
         }
 
         @Override

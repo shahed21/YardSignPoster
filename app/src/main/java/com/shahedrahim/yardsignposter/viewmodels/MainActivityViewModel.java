@@ -44,4 +44,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<List<Location>> getListOfLocations() {
         return listOfLocations;
     }
+
+    public void insertNewLocation(Location location) {
+        repository.insertNewLocation(location);
+    }
 }
