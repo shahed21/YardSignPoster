@@ -103,28 +103,77 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                recordThisLocation();
+                Snackbar.make(view, "Recording this location", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                if (checkPermissionFromDevice()) {
-                    requestPermission();
-                    return;
-                } else {
-                    try {
-                        mainActivityViewModel.getLocationManager()
-                                .requestLocationUpdates(
-                                        LocationManager.GPS_PROVIDER,
-                                        5000,
-                                        10,
-                                        mainActivityViewModel.getLocationListener());
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         });
+        if (checkPermissionFromDevice()) {
+            requestPermission();
+            return;
+        } else {
+            try {
+                mainActivityViewModel.getLocationManager()
+                        .requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                5000,
+                                10,
+                                mainActivityViewModel.getLocationListener());
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
+    void recordThisLocation() {
+        android.location.Location loc = mainActivityViewModel.getLatestLocation();
+        /*------- To get city name from coordinates -------- */
+        Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+        com.shahedrahim.yardsignposter.data.Location location;
+        List<Address> addresses;
+        try {
+            addresses = gcd.getFromLocation(loc.getLatitude(),
+                    loc.getLongitude(), 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                String addressLine = "";
+                Log.d(TAG, "onLocationChanged: getMaxAddressLineIndex = " + address.getMaxAddressLineIndex());
+                for (int i=0; i<=address.getMaxAddressLineIndex(); i++) {
+                    addressLine += address.getAddressLine(i);
+                    if (i<address.getMaxAddressLineIndex()) {
+                        Log.d(TAG, "onLocationChanged: double lined address");
+                        addressLine += "\n";
+                    }
+                }
+                Log.d(TAG, "onLocationChanged: addressLine" + addressLine);
+                location = new com.shahedrahim.yardsignposter.data.Location(
+                        loc.getLatitude(),
+                        loc.getLongitude(),
+                        addressLine,
+                        address.getLocality(),
+                        address.getAdminArea(),
+                        address.getPostalCode());
+                Log.d(TAG, "onLocationChanged: featureName = " + address.getFeatureName() );
+                location.setFeatureName(address.getFeatureName());
+                Log.d(TAG, "onLocationChanged: country = " + address.getCountryName() );
+                location.setCountry(address.getCountryName());
+                Log.d(TAG, "onLocationChanged: subAdminArea = " + address.getSubAdminArea() );
+                location.setSubAdminArea(address.getSubAdminArea());
+                Log.d(TAG, "onLocationChanged: Phone = " + address.getPhone() );
+                location.setPhone(address.getPhone());
+                Log.d(TAG, "onLocationChanged: Premises = " + address.getPremises() );
+                location.setPremises(address.getPremises());
+                Log.d(TAG, "onLocationChanged: URL = " + address.getUrl() );
+                location.setUrl(address.getUrl());
+
+                mainActivityViewModel.insertNewLocation(location);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private boolean checkPermissionFromDevice() {
         if (Build.VERSION.SDK_INT>=23) {
@@ -199,53 +248,7 @@ public class MainActivity extends AppCompatActivity
             Log.v(TAG, longitude);
             String latitude = "Latitude: " + loc.getLatitude();
             Log.v(TAG, latitude);
-
-            /*------- To get city name from coordinates -------- */
-            //String cityName = null;
-            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-            com.shahedrahim.yardsignposter.data.Location location;
-            List<Address> addresses;
-            try {
-                addresses = gcd.getFromLocation(loc.getLatitude(),
-                        loc.getLongitude(), 1);
-                if (addresses.size() > 0) {
-                    Address address = addresses.get(0);
-                    String addressLine = "";
-                    Log.d(TAG, "onLocationChanged: getMaxAddressLineIndex = " + address.getMaxAddressLineIndex());
-                    for (int i=0; i<=address.getMaxAddressLineIndex(); i++) {
-                        addressLine += address.getAddressLine(i);
-                        if (i<address.getMaxAddressLineIndex()) {
-                            Log.d(TAG, "onLocationChanged: double lined address");
-                            addressLine += "\n";
-                        }
-                    }
-                    Log.d(TAG, "onLocationChanged: addressLine" + addressLine);
-                    location = new com.shahedrahim.yardsignposter.data.Location(
-                            loc.getLatitude(),
-                            loc.getLongitude(),
-                            addressLine,
-                            address.getLocality(),
-                            address.getAdminArea(),
-                            address.getPostalCode());
-                    Log.d(TAG, "onLocationChanged: featureName = " + address.getFeatureName() );
-                    location.setFeatureName(address.getFeatureName());
-                    Log.d(TAG, "onLocationChanged: country = " + address.getCountryName() );
-                    location.setCountry(address.getCountryName());
-                    Log.d(TAG, "onLocationChanged: subAdminArea = " + address.getSubAdminArea() );
-                    location.setSubAdminArea(address.getSubAdminArea());
-                    Log.d(TAG, "onLocationChanged: Phone = " + address.getPhone() );
-                    location.setPhone(address.getPhone());
-                    Log.d(TAG, "onLocationChanged: Premises = " + address.getPremises() );
-                    location.setPremises(address.getPremises());
-                    Log.d(TAG, "onLocationChanged: URL = " + address.getUrl() );
-                    location.setUrl(address.getUrl());
-
-                    mainActivityViewModel.insertNewLocation(location);
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+            mainActivityViewModel.setLatestLocation(loc);
         }
 
         @Override

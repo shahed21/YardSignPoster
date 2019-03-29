@@ -14,6 +14,8 @@ import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
+    private android.location.Location latestLocation;
+
     private LocationManager locationManager;
     private LocationListener locationListener;
     protected LocationRepository repository;
@@ -23,6 +25,17 @@ public class MainActivityViewModel extends AndroidViewModel {
         super(application);
         repository = new LocationRepository(application);
         listOfLocations = repository.getListOfLocations();
+    }
+
+    //Setters and Getters
+
+
+    public android.location.Location getLatestLocation() {
+        return latestLocation;
+    }
+
+    public void setLatestLocation(android.location.Location latestLocation) {
+        this.latestLocation = latestLocation;
     }
 
     public LocationManager getLocationManager() {
