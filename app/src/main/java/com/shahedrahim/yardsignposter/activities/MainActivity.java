@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity
                 location.setUrl(address.getUrl());
 
                 mainActivityViewModel.insertNewLocation(location);
+                mainActivityViewModel.recordDistances(location);
             }
         }
         catch (IOException e) {

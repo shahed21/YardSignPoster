@@ -65,4 +65,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void deleteLocation(Location location) {
         repository.deleteLocation(location);
     }
+
+    public void recordDistances(Location location) {
+        repository.recordDistances(location);
+    }
 }

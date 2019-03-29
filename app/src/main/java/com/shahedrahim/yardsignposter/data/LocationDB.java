@@ -9,13 +9,14 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-@Database(entities = {Location.class}, version=1, exportSchema = false)
+@Database(entities = {Location.class, LocationDistances.class}, version=1, exportSchema = false)
 public abstract class LocationDB extends RoomDatabase {
     private static final String TAG = "LocationDB";
 
     private static LocationDB locationDB;
 
     public abstract LocationDao locationDao();
+    public abstract LocationDistancesDao locationDistancesDao();
 
     public static synchronized LocationDB getInstance(Context context) {
         if (locationDB==null) {
@@ -45,9 +46,11 @@ public abstract class LocationDB extends RoomDatabase {
         private static final String TAG = "PopulateDbAsyncTask";
 
         private LocationDao locationDao;
+        private LocationDistancesDao locationDistancesDao;
 
         public PopulateDbAsyncTask(LocationDB locationDB) {
             this.locationDao = locationDB.locationDao();
+            this.locationDistancesDao = locationDB.locationDistancesDao();
         }
 
         @Override

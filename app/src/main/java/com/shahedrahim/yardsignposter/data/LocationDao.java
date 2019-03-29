@@ -28,4 +28,13 @@ public interface LocationDao {
 
     @Query("SELECT * FROM location_table")
     LiveData<List<Location>> getListOfLocations();
+
+    @Query("SELECT * FROM location_table")
+    List<Location> getListOfLocationObjects();
+
+    @Query("SELECT EXISTS (SELECT 1 FROM location_table WHERE (latitude like :latitude) AND (longitude like :longitude))")
+    boolean exists(double latitude, double longitude);
+
+    @Query("SELECT id FROM location_table WHERE (latitude like :latitude) AND (longitude like :longitude)")
+    int getId(double latitude, double longitude);
 }
